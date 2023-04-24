@@ -72,7 +72,7 @@ class TelController extends Controller
                 'name.required' => 'Name is required!',
                 'phone.required' => 'Min 10 digit phone is required!',
             ]);
-            $tel->update();
+            $tel->update($request->all());
             return response()->json([
                 'msg' => 'Contact Updated',
                 'status' => 200,
