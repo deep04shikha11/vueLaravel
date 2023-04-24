@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tel;
+use Exception;
 use Illuminate\Http\Request;
 
 class TelController extends Controller
@@ -14,7 +15,7 @@ class TelController extends Controller
      */
     public function index()
     {
-        //
+        return Tel::all();
     }
 
     /**
@@ -25,7 +26,22 @@ class TelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validateData = $request->validate([
+                'name' => 'required',
+                'phone' => 'required|min:10',
+            ], [
+                'name.required' => 'Name is required!',
+                'phone.required' => 'Min 10 digit phone is required!',
+            ]);
+            Tel::create($request->all());
+            return response()->json([
+                'msg' => 'Contact Created',
+                'status' => 200,
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -36,7 +52,7 @@ class TelController extends Controller
      */
     public function show(Tel $tel)
     {
-        //
+        return $tel;
     }
 
     /**
@@ -48,7 +64,22 @@ class TelController extends Controller
      */
     public function update(Request $request, Tel $tel)
     {
-        //
+        try {
+            $validateData = $request->validate([
+                'name' => 'required',
+                'phone' => 'required|min:10',
+            ],[
+                'name.required' => 'Name is required!',
+                'phone.required' => 'Min 10 digit phone is required!',
+            ]);
+            $tel->update();
+            return response()->json([
+                'msg' => 'Contact Updated',
+                'status' => 200,
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -59,6 +90,14 @@ class TelController extends Controller
      */
     public function destroy(Tel $tel)
     {
-        //
+        try {
+            $tel->delete();
+            return response()->json([
+                'msg' => 'Contact Deleted',
+                'status' => 200,
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
